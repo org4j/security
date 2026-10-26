@@ -1,4 +1,4 @@
-package uz.heeypay.ecom.security;
+package uz.khakimjanovich.platform.security;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,7 +37,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 @SpringBootTest(
     classes = SecurityCustomizerTest.App.class,
-    properties = "ecom.security.roles[/admin/**]=ADMIN")
+    properties = "platform.security.roles[/admin/**]=ADMIN")
 class SecurityCustomizerTest {
 
   @Configuration
@@ -127,10 +127,10 @@ class SecurityCustomizerTest {
     assertThatThrownBy(
             () ->
                 new SpringApplicationBuilder(App.class, RouteRule.class)
-                    .properties("server.port=0", "ecom.security.roles[/admin/**]=ADMIN")
+                    .properties("server.port=0", "platform.security.roles[/admin/**]=ADMIN")
                     .run()
                     .close())
         .rootCause()
-        .hasMessageContaining("ecom.security.roles");
+        .hasMessageContaining("platform.security.roles");
   }
 }
