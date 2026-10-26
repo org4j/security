@@ -1,4 +1,4 @@
-package uz.heeypay.ecom.security;
+package uz.khakimjanovich.platform.security;
 
 import java.time.Duration;
 import java.util.Map;

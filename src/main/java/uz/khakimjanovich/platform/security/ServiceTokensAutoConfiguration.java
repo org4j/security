@@ -1,4 +1,4 @@
-package uz.heeypay.ecom.security;
+package uz.khakimjanovich.platform.security;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

@@ -1,4 +1,4 @@
-package uz.heeypay.ecom.security;
+package uz.khakimjanovich.platform.security;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package uz.heeypay.ecom.security;
+package uz.khakimjanovich.platform.security;
 
 import lombok.experimental.UtilityClass;
 

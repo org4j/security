@@ -1,4 +1,4 @@
-package uz.heeypay.ecom.security;
+package uz.khakimjanovich.platform.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,7 +37,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
-import uz.heeypay.ecom.error.ProblemSecurityHandler;
+import uz.khakimjanovich.platform.error.ProblemSecurityHandler;
 
 /**
  * The library against a real Keycloak, with real password and client-credentials tokens: roles per
