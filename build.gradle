@@ -1,8 +1,8 @@
 // One way to secure every app: Keycloak access tokens, realm roles, route rules from configuration,
 // 401/403 answered by the app's handlers.
 plugins {
-    id 'platform.library'
-    id 'platform.integration-test'
+    alias(libs.plugins.platform.library)
+    alias(libs.plugins.platform.integration.test)
 }
 
 dependencies {
@@ -14,7 +14,7 @@ dependencies {
     compileOnly libs.jakarta.servlet // provided by the app's web server
 
     testImplementation libs.starter.webmvc
-    testImplementation project(':error') // the app's 401/403 handlers in tests
+    testImplementation libs.platform.error // the app's 401/403 handlers in tests
     testImplementation libs.spring.security.test
     testImplementation libs.starter.oauth2.client
     testImplementation libs.spring.boot.http.client
@@ -22,7 +22,7 @@ dependencies {
     integrationTestImplementation libs.starter.actuator
     integrationTestImplementation libs.starter.restclient
     integrationTestImplementation libs.wiremock
-    integrationTestImplementation testFixtures(project(':keycloak')) // demo-realm.json
+    integrationTestImplementation testFixtures(libs.platform.keycloak) // demo-realm.json
     integrationTestImplementation libs.testcontainers.core
     integrationTestImplementation libs.testcontainers.junit
 }

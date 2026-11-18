@@ -1,4 +1,4 @@
-# security
+# security4j
 
 One way to secure every service: Keycloak access tokens (realm roles as `ROLE_*`), route rules
 from configuration where anything not listed is refused, public routes that ignore any token sent,
