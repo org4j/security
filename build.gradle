@@ -1,8 +1,8 @@
 // One way to secure every app: Keycloak access tokens, realm roles, route rules from configuration,
 // 401/403 answered by the app's handlers.
 plugins {
-    alias(libs.plugins.platform.library)
-    alias(libs.plugins.platform.integration.test)
+    alias(libs.plugins.conventions.library)
+    alias(libs.plugins.conventions.integration.test)
 }
 
 dependencies {
