@@ -1,2 +1,2 @@
-uz.khakimjanovich.security4j.SecurityAutoConfiguration
-uz.khakimjanovich.security4j.ServiceTokensAutoConfiguration
+io.github.org4j.security.SecurityAutoConfiguration
+io.github.org4j.security.ServiceTokensAutoConfiguration
