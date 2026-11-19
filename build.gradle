@@ -14,7 +14,7 @@ dependencies {
     compileOnly libs.jakarta.servlet // provided by the app's web server
 
     testImplementation libs.starter.webmvc
-    testImplementation libs.platform.error // the app's 401/403 handlers in tests
+    testImplementation libs.error4j // the app's 401/403 handlers in tests
     testImplementation libs.spring.security.test
     testImplementation libs.starter.oauth2.client
     testImplementation libs.spring.boot.http.client
@@ -22,7 +22,7 @@ dependencies {
     integrationTestImplementation libs.starter.actuator
     integrationTestImplementation libs.starter.restclient
     integrationTestImplementation libs.wiremock
-    integrationTestImplementation testFixtures(libs.platform.keycloak) // demo-realm.json
+    integrationTestImplementation testFixtures(libs.keycloak.admin4j) // demo-realm.json
     integrationTestImplementation libs.testcontainers.core
     integrationTestImplementation libs.testcontainers.junit
 }

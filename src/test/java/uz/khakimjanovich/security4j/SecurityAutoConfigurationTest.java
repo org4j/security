@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,12 +32,12 @@ import org.springframework.web.context.WebApplicationContext;
     classes = SecurityAutoConfigurationTest.App.class,
     properties = {
       "spring.config.import=classpath:properties/error-exception.yaml",
-      "platform.security.public-routes[0]=POST /signup",
-      "platform.security.public-routes[1]=/docs/**",
-      "platform.security.signed-in-routes[0]=/session",
-      "platform.security.roles[/admin/**]=ADMIN",
-      "platform.security.roles[/me/**]=PARTNER",
-      "platform.security.roles[/shared/**]=ADMIN, PARTNER"
+      "security4j.public-routes[0]=POST /signup",
+      "security4j.public-routes[1]=/docs/**",
+      "security4j.signed-in-routes[0]=/session",
+      "security4j.roles[/admin/**]=ADMIN",
+      "security4j.roles[/me/**]=PARTNER",
+      "security4j.roles[/shared/**]=ADMIN, PARTNER"
     })
 class SecurityAutoConfigurationTest {
 

@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

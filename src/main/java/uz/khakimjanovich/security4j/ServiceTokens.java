@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import java.io.IOException;
 import java.util.List;

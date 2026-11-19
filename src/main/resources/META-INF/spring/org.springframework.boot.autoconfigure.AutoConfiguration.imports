@@ -1,2 +1,2 @@
-uz.khakimjanovich.platform.security.SecurityAutoConfiguration
-uz.khakimjanovich.platform.security.ServiceTokensAutoConfiguration
+uz.khakimjanovich.security4j.SecurityAutoConfiguration
+uz.khakimjanovich.security4j.ServiceTokensAutoConfiguration

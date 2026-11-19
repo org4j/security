@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,14 +27,14 @@ import org.testcontainers.utility.MountableFile;
     webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
     properties = {
       "spring.ssl.bundle.pem.keycloak.truststore.certificate=classpath:tls/ca.pem",
-      "platform.security.ssl-bundle=keycloak",
-      "platform.security.service-tokens.ssl-bundle=keycloak",
-      "platform.security.roles[/adapter/**]=ADAPTER_CLIENT",
+      "security4j.ssl-bundle=keycloak",
+      "security4j.service-tokens.ssl-bundle=keycloak",
+      "security4j.roles[/adapter/**]=ADAPTER_CLIENT",
       "spring.security.oauth2.client.registration.app.client-id=demo-app",
       "spring.security.oauth2.client.registration.app.client-secret=app-secret",
       "spring.security.oauth2.client.registration.app.authorization-grant-type=client_credentials",
       "spring.security.oauth2.client.registration.app.provider=keycloak",
-      "platform.security.service-tokens.groups.adapter=app"
+      "security4j.service-tokens.groups.adapter=app"
     })
 @Testcontainers
 class IssuerOverTlsIT {
@@ -71,9 +71,9 @@ class IssuerOverTlsIT {
   static void services(DynamicPropertyRegistry registry) {
     registry.add("server.port", () -> PORT);
     // A list comes whole from one property source.
-    registry.add("platform.security.issuers[0].uri", IssuerOverTlsIT::realm);
-    registry.add("platform.security.issuers[0].audience", () -> "demo-api");
-    registry.add("platform.security.issuers[0].roles", () -> "adapter_client");
+    registry.add("security4j.issuers[0].uri", IssuerOverTlsIT::realm);
+    registry.add("security4j.issuers[0].audience", () -> "demo-api");
+    registry.add("security4j.issuers[0].roles", () -> "adapter_client");
     registry.add(
         "spring.security.oauth2.client.provider.keycloak.token-uri",
         () -> realm() + "/protocol/openid-connect/token");

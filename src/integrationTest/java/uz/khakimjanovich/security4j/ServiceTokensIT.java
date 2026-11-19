@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -46,14 +46,14 @@ import org.testcontainers.utility.MountableFile;
     webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
     properties = {
       "spring.security.oauth2.resourceserver.jwt.audiences=demo-api",
-      "platform.security.roles[/adapter/**]=ADAPTER_CLIENT",
+      "security4j.roles[/adapter/**]=ADAPTER_CLIENT",
       "spring.security.oauth2.client.registration.app.client-id=demo-app",
       "spring.security.oauth2.client.registration.app.client-secret=app-secret",
       "spring.security.oauth2.client.registration.stranger.client-id=stranger",
       "spring.security.oauth2.client.registration.stranger.client-secret=stranger-secret",
-      "platform.security.service-tokens.groups.adapter=app",
-      "platform.security.service-tokens.groups.stranger=stranger",
-      "platform.security.service-tokens.groups.flaky=app"
+      "security4j.service-tokens.groups.adapter=app",
+      "security4j.service-tokens.groups.stranger=stranger",
+      "security4j.service-tokens.groups.flaky=app"
     })
 @Testcontainers
 class ServiceTokensIT {
@@ -174,7 +174,7 @@ class ServiceTokensIT {
                 prefix + "authorization-grant-type=client_credentials",
                 prefix + "provider=keycloak",
                 "spring.security.oauth2.client.provider.keycloak.token-uri=" + tokenUri(),
-                "platform.security.service-tokens.groups.adapter=rotating",
+                "security4j.service-tokens.groups.adapter=rotating",
                 "spring.http.serviceclient.adapter.base-url=http://localhost:" + PORT)
             .run()) {
       return context.getBean(AdapterClient.class).ping();

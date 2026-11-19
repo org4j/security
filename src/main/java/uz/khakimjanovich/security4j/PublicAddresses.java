@@ -1,9 +1,9 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
-import static uz.khakimjanovich.platform.security.SecurityConstants.HTTP;
-import static uz.khakimjanovich.platform.security.SecurityConstants.HTTPS;
-import static uz.khakimjanovich.platform.security.SecurityConstants.HTTPS_PORT;
-import static uz.khakimjanovich.platform.security.SecurityConstants.HTTP_PORT;
+import static uz.khakimjanovich.security4j.SecurityConstants.HTTP;
+import static uz.khakimjanovich.security4j.SecurityConstants.HTTPS;
+import static uz.khakimjanovich.security4j.SecurityConstants.HTTPS_PORT;
+import static uz.khakimjanovich.security4j.SecurityConstants.HTTP_PORT;
 
 import java.math.BigInteger;
 import java.net.InetAddress;

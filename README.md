@@ -5,14 +5,14 @@ from configuration where anything not listed is refused, public routes that igno
 401 and 403 as problem details, and client-credentials tokens on calls to other services.
 
 ```groovy
-implementation libs.platform.security
+implementation libs.security4j
 ```
 
 Set Boot's `spring.security.oauth2.resourceserver.jwt.issuer-uri` (the realm) and
 `spring.security.oauth2.resourceserver.jwt.audiences` (the API's audience, e.g. `demo-api`).
 
 A service that takes tokens from several issuers (another unit's Keycloak) lists them in
-`platform.security.issuers` instead: each issuer's tokens must name its `audience`, and only the
+`security4j.issuers` instead: each issuer's tokens must name its `audience`, and only the
 realm `roles` listed for it count (one unit's Keycloak can't grant another's roles); a token from any
 other issuer is refused (401), and each issuer's keys are fetched with its first token. An issuer
 that can't be reached then answers 500, as Boot's one issuer does, and is tried again on the next
@@ -24,15 +24,15 @@ startup, as do an incomplete issuer and one issuer listed twice.
 
 | Property | What |
 |---|---|
-| `platform.security.public-routes` | routes anyone may call; a token sent with them is never read. `"POST /api/v1/registrations/**"` limits one to a method |
-| `platform.security.signed-in-routes` | routes any caller with a valid token may call, whatever its roles; the operation decides what it gives |
-| `platform.security.roles` | each route and the realm role it needs, in order, e.g. `"[/api/v1/admin/**]": ADMIN` |
-| `platform.security.issuers[n].uri`, `.audience`, `.roles` | trusted issuers, instead of Boot's one `issuer-uri`: each issuer's URI (its tokens' `iss`), the audience its tokens must name, and the realm roles it may grant (others in its tokens are dropped); all three required |
-| `platform.security.ssl-bundle` | an SSL bundle (`spring.ssl.bundle.*`) whose trust store the trusted issuers' keys are fetched with, for a Keycloak whose certificate comes from the app's own CA; unset, the JVM's trust store. Needs `issuers`; a bundle not defined stops startup |
-| `platform.security.service-tokens.groups` | HTTP service groups and the OAuth2 client registration (`spring.security.oauth2.client.registration.<id>`) their calls take a client-credentials token from |
-| `platform.security.service-tokens.connect-timeout` | 5s: a token request's wait for a connection |
-| `platform.security.service-tokens.read-timeout` | 10s: a token request's wait for its answer |
-| `platform.security.service-tokens.ssl-bundle` | an SSL bundle whose trust the token requests go over, as `ssl-bundle` for the keys; unset, the JVM's trust store |
+| `security4j.public-routes` | routes anyone may call; a token sent with them is never read. `"POST /api/v1/registrations/**"` limits one to a method |
+| `security4j.signed-in-routes` | routes any caller with a valid token may call, whatever its roles; the operation decides what it gives |
+| `security4j.roles` | each route and the realm role it needs, in order, e.g. `"[/api/v1/admin/**]": ADMIN` |
+| `security4j.issuers[n].uri`, `.audience`, `.roles` | trusted issuers, instead of Boot's one `issuer-uri`: each issuer's URI (its tokens' `iss`), the audience its tokens must name, and the realm roles it may grant (others in its tokens are dropped); all three required |
+| `security4j.ssl-bundle` | an SSL bundle (`spring.ssl.bundle.*`) whose trust store the trusted issuers' keys are fetched with, for a Keycloak whose certificate comes from the app's own CA; unset, the JVM's trust store. Needs `issuers`; a bundle not defined stops startup |
+| `security4j.service-tokens.groups` | HTTP service groups and the OAuth2 client registration (`spring.security.oauth2.client.registration.<id>`) their calls take a client-credentials token from |
+| `security4j.service-tokens.connect-timeout` | 5s: a token request's wait for a connection |
+| `security4j.service-tokens.read-timeout` | 10s: a token request's wait for its answer |
+| `security4j.service-tokens.ssl-bundle` | an SSL bundle whose trust the token requests go over, as `ssl-bundle` for the keys; unset, the JVM's trust store |
 
 ## Adding to the chain
 
@@ -44,7 +44,7 @@ Filters only; the route rules stay in configuration: a customizer that sets rout
 
 ## Calling another service
 
-With an OAuth2 client registration and `platform.security.service-tokens.groups.<group>=<registration>`,
+With an OAuth2 client registration and `security4j.service-tokens.groups.<group>=<registration>`,
 the group's `@HttpExchange` clients send the service's own client-credentials token (Spring
 Security's interceptor gets and refreshes it). A 401 that refuses the token (no challenge, or
 `error="invalid_token"`) drops it and the call is tried once more; `insufficient_scope` is the

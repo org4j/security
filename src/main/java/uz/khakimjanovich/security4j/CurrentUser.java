@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import lombok.experimental.UtilityClass;
 import org.jspecify.annotations.Nullable;

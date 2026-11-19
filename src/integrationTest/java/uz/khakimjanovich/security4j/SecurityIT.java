@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,17 +37,17 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
-import uz.khakimjanovich.platform.error.ProblemSecurityHandler;
+import uz.khakimjanovich.error4j.ProblemSecurityHandler;
 
 @SpringBootTest(
     classes = SecurityIT.App.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "spring.security.oauth2.resourceserver.jwt.audiences=demo-api",
-      "platform.security.public-routes[0]=/public/**",
-      "platform.security.public-routes[1]=/actuator/health/**",
-      "platform.security.roles[/admin/**]=ADMIN",
-      "platform.security.roles[/partner/**]=PARTNER"
+      "security4j.public-routes[0]=/public/**",
+      "security4j.public-routes[1]=/actuator/health/**",
+      "security4j.roles[/admin/**]=ADMIN",
+      "security4j.roles[/partner/**]=PARTNER"
     })
 @Testcontainers
 class SecurityIT {

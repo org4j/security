@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -27,7 +27,7 @@ class TrustedIssuersTest {
         .hasMessage(SecurityConstants.ISSUER_INCOMPLETE.formatted(URI));
     assertThatThrownBy(() -> properties(new SecurityProperties.Issuer(URI, "api", List.of())))
         .isInstanceOf(IllegalArgumentException.class);
-    assertThatThrownBy(() -> start("platform.security.issuers[0].uri=" + URI))
+    assertThatThrownBy(() -> start("security4j.issuers[0].uri=" + URI))
         .hasRootCauseInstanceOf(IllegalArgumentException.class)
         .rootCause()
         .hasMessageContaining(URI);
@@ -49,9 +49,9 @@ class TrustedIssuersTest {
     assertThatThrownBy(
             () ->
                 start(
-                    "platform.security.issuers[0].uri=" + URI,
-                    "platform.security.issuers[0].audience=api",
-                    "platform.security.issuers[0].roles=r",
+                    "security4j.issuers[0].uri=" + URI,
+                    "security4j.issuers[0].audience=api",
+                    "security4j.issuers[0].roles=r",
                     SecurityConstants.BOOT_ISSUER_URI + "=" + URI))
         .rootCause()
         .hasMessage(SecurityConstants.ISSUERS_AND_ISSUER_URI);

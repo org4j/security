@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.http.HttpClient;

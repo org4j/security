@@ -1,11 +1,11 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class SecurityConstants {
 
-  public static final String PROPERTIES_PREFIX = "platform.security";
+  public static final String PROPERTIES_PREFIX = "security4j";
 
   /* ------- Keycloak token ------- */
   public static final String USERNAME_CLAIM = "preferred_username";
@@ -26,10 +26,10 @@ public class SecurityConstants {
   public static final String ISSUER_TWICE = "Trusted issuer %s is listed twice";
 
   public static final String ISSUERS_AND_ISSUER_URI =
-      "Set platform.security.issuers or spring.security.oauth2.resourceserver.jwt.issuer-uri, not both";
+      "Set security4j.issuers or spring.security.oauth2.resourceserver.jwt.issuer-uri, not both";
 
   public static final String SSL_BUNDLE_WITHOUT_ISSUERS =
-      "platform.security.ssl-bundle needs platform.security.issuers";
+      "security4j.ssl-bundle needs security4j.issuers";
 
   public static final String BOOT_ISSUER_URI =
       "spring.security.oauth2.resourceserver.jwt.issuer-uri";
@@ -37,10 +37,10 @@ public class SecurityConstants {
   public static final String METHOD_SEPARATOR = " ";
 
   /* ------- service-to-service tokens ------- */
-  public static final String SERVICE_TOKENS_PREFIX = "platform.security.service-tokens";
+  public static final String SERVICE_TOKENS_PREFIX = "security4j.service-tokens";
   public static final String ROUTES_IN_CONFIGURATION =
-      "A Customizer<HttpSecurity> set route rules; they belong in platform.security.roles and"
-          + " platform.security.public-routes, and a customizer adds filters only";
+      "A Customizer<HttpSecurity> set route rules; they belong in security4j.roles and"
+          + " security4j.public-routes, and a customizer adds filters only";
   public static final String HTTP_CLIENT_FACTORY =
       "org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder";
   public static final String DEFAULT_TOKEN_CONNECT_TIMEOUT = "5s";

@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,7 +32,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @SpringBootTest(
     classes = SecurityCustomizerTest.App.class,
-    properties = "platform.security.roles[/admin/**]=ADMIN")
+    properties = "security4j.roles[/admin/**]=ADMIN")
 class SecurityCustomizerTest {
 
   @Configuration
@@ -120,10 +120,10 @@ class SecurityCustomizerTest {
     assertThatThrownBy(
             () ->
                 new SpringApplicationBuilder(App.class, RouteRule.class)
-                    .properties("server.port=0", "platform.security.roles[/admin/**]=ADMIN")
+                    .properties("server.port=0", "security4j.roles[/admin/**]=ADMIN")
                     .run()
                     .close())
         .rootCause()
-        .hasMessageContaining("platform.security.roles");
+        .hasMessageContaining("security4j.roles");
   }
 }

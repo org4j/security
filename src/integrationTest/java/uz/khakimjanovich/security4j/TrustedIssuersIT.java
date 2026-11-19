@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,7 +33,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest(
     classes = TrustedIssuersIT.App.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = "platform.security.roles[/adapter/**]=ADAPTER_CLIENT")
+    properties = "security4j.roles[/adapter/**]=ADAPTER_CLIENT")
 @Testcontainers
 class TrustedIssuersIT {
 
@@ -58,16 +58,16 @@ class TrustedIssuersIT {
 
   @DynamicPropertySource
   static void issuers(DynamicPropertyRegistry registry) {
-    registry.add("platform.security.issuers[0].uri", () -> keycloak() + "/realms/demo");
-    registry.add("platform.security.issuers[0].audience", () -> "demo-api");
-    registry.add("platform.security.issuers[0].roles", () -> "adapter_client");
-    registry.add("platform.security.issuers[1].uri", () -> keycloak() + "/realms/other");
-    registry.add("platform.security.issuers[1].audience", () -> "demo-api");
-    registry.add("platform.security.issuers[1].roles", () -> "adapter_client");
+    registry.add("security4j.issuers[0].uri", () -> keycloak() + "/realms/demo");
+    registry.add("security4j.issuers[0].audience", () -> "demo-api");
+    registry.add("security4j.issuers[0].roles", () -> "adapter_client");
+    registry.add("security4j.issuers[1].uri", () -> keycloak() + "/realms/other");
+    registry.add("security4j.issuers[1].audience", () -> "demo-api");
+    registry.add("security4j.issuers[1].roles", () -> "adapter_client");
     // A trusted issuer that may not grant adapter_client, though its tokens carry it.
-    registry.add("platform.security.issuers[2].uri", () -> keycloak() + "/realms/lent");
-    registry.add("platform.security.issuers[2].audience", () -> "demo-api");
-    registry.add("platform.security.issuers[2].roles", () -> "admin");
+    registry.add("security4j.issuers[2].uri", () -> keycloak() + "/realms/lent");
+    registry.add("security4j.issuers[2].audience", () -> "demo-api");
+    registry.add("security4j.issuers[2].roles", () -> "admin");
   }
 
   @Configuration(proxyBeanMethods = false)

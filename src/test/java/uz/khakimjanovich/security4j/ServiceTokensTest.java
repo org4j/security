@@ -1,4 +1,4 @@
-package uz.khakimjanovich.platform.security;
+package uz.khakimjanovich.security4j;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +42,7 @@ class ServiceTokensTest {
     "spring.security.oauth2.client.registration.adapters.authorization-grant-type=client_credentials",
     "spring.security.oauth2.client.registration.adapters.provider=keycloak",
     "spring.security.oauth2.client.provider.keycloak.token-uri=http://localhost:8180/realms/demo/protocol/openid-connect/token",
-    "platform.security.service-tokens.groups.uzcard=adapters"
+    "security4j.service-tokens.groups.uzcard=adapters"
   };
 
   @Test
