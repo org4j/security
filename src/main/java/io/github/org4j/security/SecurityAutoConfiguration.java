@@ -1,5 +1,6 @@
 package io.github.org4j.security;
 
+import java.util.Locale;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,6 +23,11 @@ import org.springframework.security.web.servlet.util.matcher.PathPatternRequestM
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+/**
+ * The API's one security chain, in place of Boot's: stateless, routes from {@code org4j.security.*}
+ * with anything not listed refused, tokens checked against Boot's issuer or the trusted issuers,
+ * and 401 and 403 answered by the app's own handlers.
+ */
 @AutoConfiguration(
     beforeName = {
       SecurityConstants.BOOT_WEB_SECURITY,
@@ -118,7 +124,7 @@ public class SecurityAutoConfiguration {
     var parts = route.trim().split(SecurityConstants.METHOD_SEPARATOR, 2);
     var paths = PathPatternRequestMatcher.withDefaults();
     return parts.length == 2
-        ? paths.matcher(HttpMethod.valueOf(parts[0]), parts[1].trim())
+        ? paths.matcher(HttpMethod.valueOf(parts[0].toUpperCase(Locale.ROOT)), parts[1].trim())
         : paths.matcher(parts[0]);
   }
 
