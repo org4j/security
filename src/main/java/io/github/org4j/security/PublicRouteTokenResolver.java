@@ -6,6 +6,10 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenResolv
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+/**
+ * Reads no token on a public route, so a stale one sent along is never refused there. Elsewhere,
+ * Spring Security's own resolver.
+ */
 public class PublicRouteTokenResolver implements BearerTokenResolver {
 
   private final RequestMatcher publicRoutes;

@@ -23,6 +23,11 @@ import org.springframework.security.web.servlet.util.matcher.PathPatternRequestM
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+/**
+ * The API's one security chain, in place of Boot's: stateless, routes from {@code org4j.security.*}
+ * with anything not listed refused, tokens checked against Boot's issuer or the trusted issuers,
+ * and 401 and 403 answered by the app's own handlers.
+ */
 @AutoConfiguration(
     beforeName = {
       SecurityConstants.BOOT_WEB_SECURITY,

@@ -22,6 +22,12 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedCli
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 import org.springframework.web.client.RestClient;
 
+/**
+ * {@link ServiceTokens} in an app with OAuth2 client registrations. Its tokens come from the app's
+ * own {@code OAuth2AuthorizedClientManager} when it has one; otherwise from a manager over Boot's
+ * authorized-client store, since Spring Security's default needs a servlet request a job's call has
+ * not.
+ */
 @AutoConfiguration(afterName = SecurityConstants.BOOT_OAUTH2_CLIENT)
 @ConditionalOnClass(
     name = {

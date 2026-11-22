@@ -33,18 +33,7 @@ public record SecurityProperties(
     @DefaultValue List<Issuer> issuers,
     @Nullable String sslBundle) {
 
-  /**
-   * A route with no role, or a blank one, would quietly let nobody in: refused at startup.
-   *
-   * @param publicRoutes routes anyone may call, without a token
-   * @param signedInRoutes routes any caller with a valid token may call, whatever its roles
-   * @param roles each route and the realm roles that may call it (one, or several separated by
-   *     commas: any of them), in order; a route not listed is refused
-   * @param issuers trusted issuers, each with the audience its tokens must name and the roles it
-   *     may grant; empty, Boot's one issuer-uri is used
-   * @param sslBundle the SSL bundle the issuers' keys are fetched with; unset, the JVM's trust
-   *     store
-   */
+  /** A route with no role, or a blank one, would quietly let nobody in: refused at startup. */
   public SecurityProperties {
     issuers.forEach(Issuer::check);
     // Boot's one issuer-uri fetches its keys itself: a bundle there would quietly be ignored.

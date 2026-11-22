@@ -3,6 +3,7 @@ package io.github.org4j.security;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,11 @@ import org.springframework.security.oauth2.client.web.client.OAuth2ClientHttpReq
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientHttpServiceGroupConfigurer;
 
+/**
+ * Gives each configured HTTP service group the service's own client-credentials token, from its
+ * OAuth2 client registration. A 401 that refuses the token, with no challenge or {@code
+ * invalid_token}, drops it and the call is tried once more with a new one.
+ */
 public class ServiceTokens implements RestClientHttpServiceGroupConfigurer {
 
   private final OAuth2AuthorizedClientManager manager;
@@ -37,7 +43,9 @@ public class ServiceTokens implements RestClientHttpServiceGroupConfigurer {
     services.forEachClient(
         (group, builder) -> {
           var registration = groups.get(group.name());
-          if (registration != null) builder.requestInterceptors(add(interceptor(registration)));
+          if (registration != null) {
+            builder.requestInterceptors(add(interceptor(registration)));
+          }
         });
   }
 
@@ -55,7 +63,7 @@ public class ServiceTokens implements RestClientHttpServiceGroupConfigurer {
     return tokens;
   }
 
-  private static java.util.function.Consumer<List<ClientHttpRequestInterceptor>> add(
+  private static Consumer<List<ClientHttpRequestInterceptor>> add(
       OAuth2ClientHttpRequestInterceptor tokens) {
     return interceptors -> {
       interceptors.add(new RetryOnceOnUnauthorized());
@@ -68,10 +76,13 @@ public class ServiceTokens implements RestClientHttpServiceGroupConfigurer {
     public ClientHttpResponse intercept(
         HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
       var response = execution.execute(request, body);
-      if (!response.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) return response;
-      var challenge = response.getHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE);
-      if (challenge != null && !challenge.contains(SecurityConstants.INVALID_TOKEN))
+      if (!response.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
         return response;
+      }
+      var challenge = response.getHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE);
+      if (challenge != null && !challenge.contains(SecurityConstants.INVALID_TOKEN)) {
+        return response;
+      }
       response.close();
       return execution.execute(request, body);
     }

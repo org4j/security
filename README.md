@@ -24,7 +24,7 @@ startup, as do an incomplete issuer and one issuer listed twice.
 
 | Property | What |
 |---|---|
-| `org4j.security.public-routes` | routes anyone may call; a token sent with them is never read. `"POST /api/v1/registrations/**"` limits one to a method |
+| `org4j.security.public-routes` | routes anyone may call; a token sent with them is never read. `"POST /api/v1/registrations/**"` limits one to a method, in any case |
 | `org4j.security.signed-in-routes` | routes any caller with a valid token may call, whatever its roles; the operation decides what it gives |
 | `org4j.security.roles` | each route and the realm role it needs, in order, e.g. `"[/api/v1/admin/**]": ADMIN` |
 | `org4j.security.issuers[n].uri`, `.audience`, `.roles` | trusted issuers, instead of Boot's one `issuer-uri`: each issuer's URI (its tokens' `iss`), the audience its tokens must name, and the realm roles it may grant (others in its tokens are dropped); all three required |
@@ -53,9 +53,26 @@ otherwise a manager over Boot's authorized-client store does (Spring Security's 
 servlet request, which a job's call has not), its token requests over Boot's `RestClient.Builder`.
 Without registrations nothing changes. The registration's secret comes from Vault.
 
-`CurrentUser.name()` and `CurrentUser.clientId()` say who is calling, or null without a token.
-`CurrentUser.hasRealmRole("merchant-admin")` asks for a realm role by its Keycloak name, so no app
-rebuilds the `ROLE_*` authority itself.
+
+## Who is calling
+
+| Call | Gives |
+|---|---|
+| `CurrentUser.name()` | the token's `preferred_username`, or its subject without one |
+| `CurrentUser.id()` | the token's subject |
+| `CurrentUser.clientId()` | the client the token was issued to (`azp`) |
+| `CurrentUser.hasRealmRole("merchant-admin")` | whether the caller holds a realm role, by its Keycloak name, so no app rebuilds the `ROLE_*` authority |
+
+Without a token, on a public route too, there is no caller: null, and no role.
+
+## Checking a URL a caller hands in
+
+`PublicAddresses.allowed(url, testHosts)` says whether the app may call a URL a caller gave it, such
+as a webhook. It must be HTTPS on port 443 to a host whose every address is public. Private,
+loopback, link-local, reserved and documentation ranges are refused, and so are IPv6 forms that
+embed an IPv4 address. A test host (`host:port`) passes over HTTP or HTTPS without the check. The
+call resolves the host again, so hand `PublicAddresses.resolvePublic` to the HTTP client as its
+resolver: then the address called is the address checked.
 
 ## Errors
 
@@ -75,11 +92,14 @@ the error library on the classpath, its `ProblemSecurityHandler` is both, so the
 
 ## Tests
 
-- `./gradlew test`: route rules, public routes with stale tokens, module
-  customizers, the token converter, service tokens armed and dormant.
-- `./gradlew integrationTest`: a real Keycloak with password and
-  client-credentials tokens: roles, the audience, stale tokens on public routes, a module's
-  refusing filter, service tokens with a role check, one retry on 401 and a rotated secret;
-  trusted issuers over four realms: a client of either trusted issuer, an issuer not trusted, another
-  audience, a role the issuer may not grant, a client without the route's role; a Keycloak over HTTPS only, its
-  certificate from a test CA (`tls/`) the JVM doesn't trust: the token and the keys over the bundles.
+- `./gradlew test`:
+  - route rules, methods in any case, and public routes with stale tokens;
+  - module customizers, the token converter, and who is calling (no one on a public route);
+  - `PublicAddresses`, and service tokens armed and dormant.
+- `./gradlew integrationTest`: a real Keycloak with password and client-credentials tokens.
+  - Roles, the audience, stale tokens on public routes, and a module's refusing filter.
+  - Service tokens: a role check, one retry on 401, and a rotated secret.
+  - Trusted issuers over four realms: a client of either trusted issuer, an issuer not trusted,
+    another audience, a role the issuer may not grant, and a client without the route's role.
+  - A Keycloak over HTTPS only, its certificate from a test CA (`tls/`) the JVM doesn't trust: the
+    token and the keys go over the SSL bundles.

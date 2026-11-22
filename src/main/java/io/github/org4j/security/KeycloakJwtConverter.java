@@ -3,8 +3,6 @@ package io.github.org4j.security;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +10,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+/**
+ * Turns a Keycloak access token into an authentication: its realm roles become {@code ROLE_*}
+ * authorities, upper case, and its {@code preferred_username} the name.
+ */
 public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
   @Override
@@ -24,14 +26,13 @@ public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticati
   }
 
   private static Collection<GrantedAuthority> roles(Jwt jwt) {
-    Map<String, Object> realmAccess =
-        Optional.ofNullable(jwt.getClaimAsMap(SecurityConstants.REALM_ACCESS_CLAIM))
-            .orElse(Map.of());
-    if (!(realmAccess.get(SecurityConstants.ROLES) instanceof List<?> roles)) {
+    var realmAccess = jwt.getClaimAsMap(SecurityConstants.REALM_ACCESS_CLAIM);
+    if (realmAccess == null
+        || !(realmAccess.get(SecurityConstants.ROLES) instanceof List<?> roles)) {
       return List.of();
     }
     return roles.stream()
-        .map(role -> (GrantedAuthority) new SimpleGrantedAuthority(authority(role.toString())))
+        .<GrantedAuthority>map(role -> new SimpleGrantedAuthority(authority(role.toString())))
         .toList();
   }
 
