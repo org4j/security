@@ -1,5 +1,6 @@
 package io.github.org4j.security;
 
+import java.util.Locale;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -118,7 +119,7 @@ public class SecurityAutoConfiguration {
     var parts = route.trim().split(SecurityConstants.METHOD_SEPARATOR, 2);
     var paths = PathPatternRequestMatcher.withDefaults();
     return parts.length == 2
-        ? paths.matcher(HttpMethod.valueOf(parts[0]), parts[1].trim())
+        ? paths.matcher(HttpMethod.valueOf(parts[0].toUpperCase(Locale.ROOT)), parts[1].trim())
         : paths.matcher(parts[0]);
   }
 

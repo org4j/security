@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -23,6 +25,16 @@ class CurrentUserTest {
     assertThat(CurrentUser.name()).isNull();
     assertThat(CurrentUser.clientId()).isNull();
     assertThat(CurrentUser.id()).isNull();
+  }
+
+  @Test
+  void theAnonymousStandInIsNoCaller() {
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new AnonymousAuthenticationToken(
+                "key", "anonymousUser", AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS")));
+    assertThat(CurrentUser.name()).isNull();
+    assertThat(CurrentUser.hasRealmRole("anonymous")).isFalse();
   }
 
   @Test

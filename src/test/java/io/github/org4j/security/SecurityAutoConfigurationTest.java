@@ -3,6 +3,8 @@ package io.github.org4j.security;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -34,6 +37,7 @@ import org.springframework.web.context.WebApplicationContext;
       "spring.config.import=classpath:properties/error-exception.yaml",
       "org4j.security.public-routes[0]=POST /signup",
       "org4j.security.public-routes[1]=/docs/**",
+      "org4j.security.public-routes[2]=put /lowercase",
       "org4j.security.signed-in-routes[0]=/session",
       "org4j.security.roles[/admin/**]=ADMIN",
       "org4j.security.roles[/me/**]=PARTNER",
@@ -68,6 +72,16 @@ class SecurityAutoConfigurationTest {
         return "ok";
       }
 
+      @PutMapping("/lowercase")
+      String lowercase() {
+        return "ok";
+      }
+
+      @GetMapping("/docs/caller")
+      String caller() {
+        return CurrentUser.name() + " " + CurrentUser.hasRealmRole("anonymous");
+      }
+
       @GetMapping({"/signup", "/admin/x", "/me/x", "/shared/x", "/other", "/docs/x", "/session"})
       String any() {
         return "ok";
@@ -97,6 +111,16 @@ class SecurityAutoConfigurationTest {
     mvc.perform(post("/signup")).andExpect(status().isOk());
     mvc.perform(get("/docs/x")).andExpect(status().isOk());
     mvc.perform(get("/signup")).andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  void aRoutesMethodMayBeWrittenInLowerCase() throws Exception {
+    mvc.perform(put("/lowercase")).andExpect(status().isOk());
+  }
+
+  @Test
+  void onAPublicRouteWithoutATokenThereIsNoCaller() throws Exception {
+    mvc.perform(get("/docs/caller")).andExpect(content().string("null false"));
   }
 
   @Test
